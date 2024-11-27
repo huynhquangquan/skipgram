@@ -2,4 +2,5 @@
 
 * cd đến path hiện tại.
 * Sử dụng Terminal ảo
-* pip install -r requirements.txt
+* Viết lệnh OS
+```pip install -r requirements.txt```
