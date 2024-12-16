@@ -12,7 +12,8 @@ np.random.seed(42) # Cố định kết quả mỗi lần chạy
 # Hàm tiền xử lý văn bản
 def preprocess_text(text, custom_phrases):
     text = text.lower()  # Chuyển thành chữ thường
-    cleaned_text = ''.join(char for char in text if char.isalnum() or char.isspace())  # Loại bỏ ký tự đặc biệt
+    # Loại bỏ ký tự đặc biệt
+    cleaned_text = ''.join(char for char in text if char.isalnum() or char.isspace())
     words = ViTokenizer.tokenize(cleaned_text).split()  # Tách từ tiếng Việt
     # Nối cụm từ dựa trên danh sách custom_phrases
     for phrase in custom_phrases:
@@ -162,10 +163,13 @@ for phrase in custom_read.splitlines():
 # Dữ liệu mẫu
 file = open("train.txt", "r", encoding='utf-8')
 texts = file.read()
+file.close()
+print(f'Số lượng từ: {len(texts.split())}')
 
 # Tiền xử lý dữ liệu
 # Stopword cho dữ liệu
 texts = remove_stopwords(texts,stopwords)
+print(f'Số lượng từ sau khi StopWord: {len(texts.split())}')
 
 # Tách chuỗi dựa trên nhiều dấu ngắt câu
 separators = [".", "?", "!"]
@@ -173,7 +177,7 @@ for separator in separators:
     texts = texts.replace(separator, "|")  # Thay thế các ký tự phân cách bằng "|"
 processed_text = [preprocess_text(text,custom_phrases) for text in texts.split("|")]
 vocab = build_vocab(processed_text)
-print(f'Số lượng từ: {len(vocab)}')
+print(f'Số lượng từ vựng: {len(vocab)}')
 
 # Huấn luyện mô hình
 W1, W2, loss_history = train_skipgram(processed_text, vocab, epochs=10, learning_rate=0.01)
